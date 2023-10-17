@@ -1,8 +1,9 @@
 import { promises as fsPromises } from 'node:fs'
 import { join } from 'node:path'
+import { resource_server } from 'src/constants'
 
 async function main() {
-  const res = await fetch('https://data.home.juxt.site/petstore/openapi.json')
+  const res = await fetch(`${resource_server}/petstore/openapi.json`)
   const jsonData = await res.text()
   if (jsonData) {
     const jsonString = jsonData

@@ -1,7 +1,10 @@
-/* eslint-disable */ export default {
+import { resource_server } from './constants'
+
+/* eslint-disable */
+export default {
   servers: [
     {
-      url: 'https://data.home.juxt.site/petstore'
+      url: `${resource_server}/petstore`
     }
   ],
   info: {

@@ -53,22 +53,22 @@ async function photoPrismLogin() {
 }
 
 // preload photoprism token
-photoPrismLogin()
-  .then((res) => {
-    if (!res) {
-      console.error('no data from photoprism login')
-      return
-    }
-    if (res.apiToken) {
-      localStorage.setItem(photoPrismTokenKey, res.apiToken)
-    }
-    if (res.previewToken) {
-      localStorage.setItem(photoPrismPreviewTokenKey, res.previewToken)
-    }
-  })
-  .catch((error) => {
-    console.error('error logging in to photoprism', error)
-  })
+// photoPrismLogin()
+//   .then((res) => {
+//     if (!res) {
+//       console.error('no data from photoprism login')
+//       return
+//     }
+//     if (res.apiToken) {
+//       localStorage.setItem(photoPrismTokenKey, res.apiToken)
+//     }
+//     if (res.previewToken) {
+//       localStorage.setItem(photoPrismPreviewTokenKey, res.previewToken)
+//     }
+//   })
+//   .catch((error) => {
+//     console.error('error logging in to photoprism', error)
+//   })
 
 export function usePhotoPrismLogin() {
   return useQuery({
@@ -91,8 +91,8 @@ export function authorizeCallback(onSuccess?: () => void) {
     token_endpoint: `${authorization_server}/oauth/token`,
     redirect_uri: `${app_server}/oauth-redirect.html`,
     requested_scopes: [
-      'https://auth.home.juxt.site/scopes/petstore/write',
-      'https://auth.home.juxt.site/scopes/petstore/read'
+      `${authorization_server}/scopes/petstore/write`,
+      `${authorization_server}/scopes/petstore/read`
     ]
   })
     .then(() => {
