@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { type Pet, petstoreClient } from '../fetsClient'
 import { usePhotoPrismLogin, useUser } from './auth'
 import { type PhotosResponse } from '../photoprism'
-import { album_id, photo_server } from '../constants'
+import { PETS_ALBUM_ID, PHOTO_SERVER } from '../constants'
 
 export async function fetchPets() {
   const response = await petstoreClient['/pets'].get()
@@ -78,7 +78,7 @@ async function uploadPetPhoto({
     return null
   }
   await fetch(
-    `${photo_server}/api/v1/users/urbtut4alt5a7tnv/upload/tjqf9xj`,
+    `${PHOTO_SERVER}/api/v1/users/urbtut4alt5a7tnv/upload/tjqf9xj`,
     {
       headers: {
         accept: 'application/json, text/plain, */*',
@@ -101,7 +101,7 @@ async function getPetPhotos({
   previewToken?: string
 }) {
   const res = await fetch(
-    `${photo_server}/api/v1/photos?count=240&offset=0&s=${album_id}&merged=true&country=&camera=0&order=added&q=`,
+    `${PHOTO_SERVER}/api/v1/photos?count=240&offset=0&s=${PETS_ALBUM_ID}&merged=true&country=&camera=0&order=added&q=`,
     {
       headers: {
         accept: 'application/json, text/plain, */*',
@@ -113,7 +113,7 @@ async function getPetPhotos({
   const json = (await res.json()) as PhotosResponse
 
   return json.map(photo => ({
-    url: `${photo_server}/api/v1/t/${photo.Hash}/${previewToken}/fit_1920`,
+    url: `${PHOTO_SERVER}/api/v1/t/${photo.Hash}/${previewToken}/fit_1920`,
     title: photo.Title,
     id: photo.ID
   }))

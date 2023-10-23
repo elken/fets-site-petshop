@@ -1,10 +1,10 @@
-import { resource_server } from './constants'
+import { RESOURCE_SERVER } from './constants'
 
 /* eslint-disable */
 export default {
   servers: [
     {
-      url: `${resource_server}/petstore`
+      url: `${RESOURCE_SERVER}/petstore`
     }
   ],
   info: {

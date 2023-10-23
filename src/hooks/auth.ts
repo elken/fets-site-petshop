@@ -2,12 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import { siteClient, petstoreClient } from '../fetsClient'
 import { registerOAuth2Worker, authorize, clearToken } from '@juxt/pass'
 import {
-  app_server,
-  authorization_server,
+  APP_SERVER,
+  AUTHORIZATION_SERVER,
   photoPrismPreviewTokenKey,
   photoPrismTokenKey,
-  photo_server,
-  resource_server
+  PHOTO_SERVER,
+  RESOURCE_SERVER
 } from '../constants'
 import { useAtom } from 'jotai'
 import { atomWithLocalStorage } from '../utils'
@@ -26,7 +26,7 @@ async function photoPrismLogin() {
       previewToken: existingPreviewToken
     }
   }
-  const res: PhotoPrismLoginResponse = await fetch(`${photo_server}/api/v1/session`, {
+  const res: PhotoPrismLoginResponse = await fetch(`${PHOTO_SERVER}/api/v1/session`, {
     headers: {
       accept: 'application/json, text/plain, */*',
       'accept-language': 'en-GB',
@@ -88,14 +88,14 @@ registerOAuth2Worker().catch((error) => {
 // this callback wraps the `authorize` function and will be invoked when the user clicks for example on a login button
 export function authorizeCallback(onSuccess?: () => void) {
   authorize({
-    resource_server,
+    resource_server: RESOURCE_SERVER,
     client_id: 'swagger-ui',
-    authorization_endpoint: `${authorization_server}/oauth/authorize`,
-    token_endpoint: `${authorization_server}/oauth/token`,
-    redirect_uri: `${app_server}/oauth-redirect.html`,
+    authorization_endpoint: `${AUTHORIZATION_SERVER}/oauth/authorize`,
+    token_endpoint: `${AUTHORIZATION_SERVER}/oauth/token`,
+    redirect_uri: `${APP_SERVER}/oauth-redirect.html`,
     requested_scopes: [
-      `${authorization_server}/scopes/petstore/write`,
-      `${authorization_server}/scopes/petstore/read`
+      `${AUTHORIZATION_SERVER}/scopes/petstore/write`,
+      `${AUTHORIZATION_SERVER}/scopes/petstore/read`
     ]
   })
     .then(() => {
@@ -139,7 +139,7 @@ export function useUser() {
         .catch(async (error) => {
           console.error('error fetching user', error)
           if (error.message === 'Unauthorized') {
-            clearToken(resource_server)
+            clearToken(RESOURCE_SERVER)
               .catch((error) => {
                 console.error('error clearing token', error)
               })
