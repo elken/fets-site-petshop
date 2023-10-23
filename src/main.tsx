@@ -9,7 +9,7 @@ import Pet, { loader as petLoader } from './pages/pet'
 import Root from './pages/root'
 import Index from './pages'
 import AddPet from './pages/add-pet'
-import Mine from './pages/mine'
+import Added from './pages/added'
 import ProtectedRoute from './pages/protected-route'
 
 const container = document.getElementById('root')
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'added',
-                element: <ProtectedRoute><Mine /></ProtectedRoute>
+                element: <ProtectedRoute><Added /></ProtectedRoute>
             },
             {
                 path: 'pet/:petId',
