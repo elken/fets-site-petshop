@@ -111,7 +111,6 @@ async function getPetPhotos({
     }
   )
   const json = (await res.json()) as PhotosResponse
-  console.log(json)
 
   return json.map(photo => ({
     url: `${photo_server}/api/v1/t/${photo.Hash}/${previewToken}/fit_1920`,

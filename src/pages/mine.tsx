@@ -3,7 +3,7 @@ import { usePets } from 'hooks/data'
 
 export default function Mine() {
     const { data: pets } = usePets()
-    console.log(pets?.filter((pet) => pet.name && pet?.status !== 'unavailable'))
+
     return (
         <section className="mx-auto grid grid-cols-4 gap-4">
             {pets?.filter((pet) => pet.name && pet?.status !== 'unavailable')

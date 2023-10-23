@@ -1,5 +1,4 @@
 import { useRouteError } from 'react-router-dom'
-import styles from '../app/app.module.css'
 import { usePetPhotos } from 'hooks/data'
 import { GiphyFetch } from '@giphy/js-fetch-api'
 import { useEffect, useState } from 'react'
@@ -27,22 +26,17 @@ export default function ErrorPage() {
     return (
         <>
             <Navbar />
-            <main id="error-page" className={`${styles.main} flex flex-col place-items-center pt-24`}>
-                <header className={styles.header}>
-                    <h1 className={`${styles.headerTitle} !text-red-500`}>Oops!</h1>
+            <main className="bg-dots flex flex-col items-center justify-center">
+                <header>
+                    <h1 className='text-6xl lg:text-7xl leading-none font-extrabold tracking-tight  mb-8 sm:mb-10 text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-purple-800 !text-red-500'>Oops!</h1>
                 </header>
-                <div className={styles.headerDescription}>
+                <div className="max-w-screen-lg text-lg sm:text-2xl sm:leading-10 text-gray-300 font-medium mb-10 sm:mb-11">
                     <p>Sorry, an unexpected error has occurred.</p>
                     <p>
                         {error?.statusText || error?.message}
                     </p>
 
-                    <img
-                        className="h-96 w-full object-contain p-4"
-                        src={image} />
-
-                    <p>Hopefully this makes up for it!</p>
-
+                    <img className="h-96 w-full object-contain p-4" src={image} />
                 </div>
             </main>
         </>

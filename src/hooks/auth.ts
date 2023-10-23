@@ -26,7 +26,6 @@ async function photoPrismLogin() {
       previewToken: existingPreviewToken
     }
   }
-  console.log('trying')
   const res: PhotoPrismLoginResponse = await fetch(`${photo_server}/api/v1/session`, {
     headers: {
       accept: 'application/json, text/plain, */*',
@@ -38,7 +37,6 @@ async function photoPrismLogin() {
     method: 'POST'
   })
     .then(async (res) => {
-      console.log(res)
       return await res.json()
     })
     .catch((error) => {
@@ -49,7 +47,6 @@ async function photoPrismLogin() {
       }
     })
 
-  console.log('tried')
   if (res) {
     return {
       apiToken: res.id,
@@ -90,7 +87,6 @@ registerOAuth2Worker().catch((error) => {
 
 // this callback wraps the `authorize` function and will be invoked when the user clicks for example on a login button
 export function authorizeCallback(onSuccess?: () => void) {
-  console.log('authorizing')
   authorize({
     resource_server,
     client_id: 'swagger-ui',
@@ -103,7 +99,6 @@ export function authorizeCallback(onSuccess?: () => void) {
     ]
   })
     .then(() => {
-      console.log('authorized')
       onSuccess?.()
     })
     .catch((error) => {

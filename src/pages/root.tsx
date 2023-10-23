@@ -1,5 +1,4 @@
 import Navbar from 'components/navbar/navbar'
-import styles from '../app/app.module.css'
 import { Outlet } from 'react-router-dom'
 import { useState, createContext } from 'react'
 import NotificationList from 'components/notification/notification-list'
@@ -29,7 +28,7 @@ export default function Root() {
             <div className="absolute top-24 right-0">
                 <NotificationList data={notifications} removeNotification={removeNotification} />
             </div>
-            <main className={`${styles.main} flex items-center justify-center`}>
+            <main className="bg-dots min-h-screen px-4 space-y-16 w-full bg-gray-900 flex items-center justify-center">
                 <Outlet />
             </main>
         </RootContext.Provider>
