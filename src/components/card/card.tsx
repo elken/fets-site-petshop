@@ -1,17 +1,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import styles from './card.module.css'
 import { TrashIcon } from '@heroicons/react/24/outline'
-import { type Pet, client } from '../../fetsClient'
+import { type Pet, petstoreClient } from '../../fetsClient'
 import { refetchPets } from '../../utils'
+import { Link } from 'react-router-dom'
 
 async function deletePet(pet: Pet) {
   if (!pet.id) {
     throw new Error('Pet id is required')
   }
-  const response = await client['/pet/{petId}'].delete({
+  const response = await petstoreClient['/pet/{petId}'].delete({
     params: { petId: pet.id }
   })
-  if (response.status !== 204) {
+  if (response.status !== 200) {
     throw new Error('Failed to delete pet')
   }
 }
@@ -64,14 +65,9 @@ function Card(pet: Pet) {
               />
             ))}
         <div className={styles.callToActionContainer}>
-          <a
-            href={`/pet/${pet.id}`}
-            target="_blank"
-            rel="noreferrer"
-            className={styles.callToActionElement}
-          >
+          <Link to={`/pet/${pet.id}`} className={styles.callToActionElement}>
             See more →
-          </a>
+          </Link>
         </div>
       </div>
     </div>

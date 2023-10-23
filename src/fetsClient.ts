@@ -4,6 +4,10 @@ import { resource_server } from './constants'
 
 export type Pet = OASModel<NormalizeOAS<typeof openAPIDoc>, 'Pet'>
 
-export const client = createClient<NormalizeOAS<typeof openAPIDoc>>({
+export const petstoreClient = createClient<NormalizeOAS<typeof openAPIDoc>>({
   endpoint: `${resource_server}/petstore`
+})
+
+export const siteClient = createClient({
+  endpoint: `${resource_server}/_site`
 })

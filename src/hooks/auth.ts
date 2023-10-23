@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
-import { client } from '../fetsClient'
+import { siteClient, petstoreClient } from '../fetsClient'
 import { registerOAuth2Worker, authorize, clearToken } from '@juxt/pass'
 import {
   app_server,
   authorization_server,
   photoPrismPreviewTokenKey,
   photoPrismTokenKey,
+  photo_server,
   resource_server
 } from '../constants'
 import { useAtom } from 'jotai'
@@ -18,24 +18,29 @@ const loggedInAtom = atomWithLocalStorage('loggedIn', false)
 async function photoPrismLogin() {
   const existingApiToken = localStorage.getItem(photoPrismTokenKey)
   const existingPreviewToken = localStorage.getItem(photoPrismPreviewTokenKey)
+  const username = import.meta.env.VITE_PHOTOPRISM_USER
+  const password = import.meta.env.VITE_PHOTOPRISM_PASSWORD
   if (existingApiToken && existingPreviewToken) {
     return {
       apiToken: existingApiToken,
       previewToken: existingPreviewToken
     }
   }
-  const res: PhotoPrismLoginResponse = await fetch('photo-api/v1/session', {
+  console.log('trying')
+  const res: PhotoPrismLoginResponse = await fetch(`${photo_server}/api/v1/session`, {
     headers: {
       accept: 'application/json, text/plain, */*',
       'accept-language': 'en-GB',
-      'content-type': 'application/json'
+      'content-type': 'application/json',
+      'access-control-allow-origin': '*'
     },
-    body: `{username:"admin",password:"${
-      import.meta.env.PHOTOPRISM_PASSWORD
-    }"}`,
+    body: `{"username":"${username}","password":"${password}"}`,
     method: 'POST'
   })
-    .then(async (res) => await res.json())
+    .then(async (res) => {
+      console.log(res)
+      return await res.json()
+    })
     .catch((error) => {
       console.error('error logging in to photoprism', error)
       return {
@@ -44,6 +49,7 @@ async function photoPrismLogin() {
       }
     })
 
+  console.log('tried')
   if (res) {
     return {
       apiToken: res.id,
@@ -53,22 +59,23 @@ async function photoPrismLogin() {
 }
 
 // preload photoprism token
-// photoPrismLogin()
-//   .then((res) => {
-//     if (!res) {
-//       console.error('no data from photoprism login')
-//       return
-//     }
-//     if (res.apiToken) {
-//       localStorage.setItem(photoPrismTokenKey, res.apiToken)
-//     }
-//     if (res.previewToken) {
-//       localStorage.setItem(photoPrismPreviewTokenKey, res.previewToken)
-//     }
-//   })
-//   .catch((error) => {
-//     console.error('error logging in to photoprism', error)
-//   })
+photoPrismLogin()
+  .then(async (res) => {
+    if (!res) {
+      console.error('no data from photoprism login')
+      return
+    }
+    console.log('Saving tokens')
+    if (res.apiToken) {
+      localStorage.setItem(photoPrismTokenKey, res.apiToken)
+    }
+    if (res.previewToken) {
+      localStorage.setItem(photoPrismPreviewTokenKey, res.previewToken)
+    }
+  })
+  .catch((error) => {
+    console.error('error logging in to photoprism', error)
+  })
 
 export function usePhotoPrismLogin() {
   return useQuery({
@@ -105,7 +112,7 @@ export function authorizeCallback(onSuccess?: () => void) {
 }
 
 export async function fetchPets() {
-  const response = await client['/pets'].get()
+  const response = await petstoreClient['/pets'].get()
   if (response.status === 401) {
     throw new Error('Unauthorized')
   }
@@ -116,33 +123,33 @@ export async function fetchPets() {
   return pets
 }
 
+export async function fetchMe() {
+  const response = await siteClient['/whoami'].get()
+
+  if (response.status === 401) {
+    throw new Error('Unauthorized')
+  }
+  if (response.status !== 200) {
+    throw new Error('Failed to fetch user')
+  }
+
+  return await response.json()
+}
+
 export function useUser() {
-  const [loggedIn, setLoggedIn] = useAtom(loggedInAtom)
-  const userRes = useQuery({
+  return useQuery({
     queryKey: ['user'],
     queryFn: async () =>
-      await fetchPets()
-        .then((pets) => {
-          setLoggedIn(true)
-          return pets
-        })
+      await fetchMe()
         .catch(async (error) => {
-          console.error('error fetching pets', error)
+          console.error('error fetching user', error)
           if (error.message === 'Unauthorized') {
             clearToken(resource_server)
-              .then(() => {
-                setLoggedIn(false)
-              })
               .catch((error) => {
                 console.error('error clearing token', error)
               })
           }
-          return []
+          return null;
         })
   })
-
-  return {
-    ...userRes,
-    loggedIn
-  }
 }

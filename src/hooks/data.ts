@@ -1,11 +1,12 @@
 import { GiphyFetch } from '@giphy/js-fetch-api'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { type Pet, client } from '../fetsClient'
+import { type Pet, petstoreClient } from '../fetsClient'
 import { usePhotoPrismLogin, useUser } from './auth'
 import { type PhotosResponse } from '../photoprism'
+import { album_id, photo_server } from '../constants'
 
 export async function fetchPets() {
-  const response = await client['/pets'].get()
+  const response = await petstoreClient['/pets'].get()
   switch (response.status) {
     case 400:
       throw new Error(response.statusText)
@@ -17,6 +18,19 @@ export async function fetchPets() {
   return pets
 }
 
+export async function fetchPet(id) {
+  const response = await petstoreClient[`/pet/${id}`].get()
+
+  switch (response.status) {
+    case 400:
+      throw new Error(response.statusText)
+    case 401:
+      throw new Error(response.statusText)
+  }
+
+  return await response.json()
+}
+
 const giphyFetch = new GiphyFetch('sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh')
 
 async function addPet(pet: Pet) {
@@ -25,7 +39,7 @@ async function addPet(pet: Pet) {
   }
   const image = await giphyFetch.search(pet.name, { limit: 1 })
   const hasPhoto = pet?.photoUrls && pet.photoUrls.length > 0
-  const response = await client['/pet'].post({
+  const response = await petstoreClient['/pet'].post({
     json: {
       ...pet,
       photoUrls: hasPhoto ? pet.photoUrls : [image.data[0].images.original.url],
@@ -42,7 +56,6 @@ export function usePets() {
   return useQuery({
     queryKey: ['pets'],
     queryFn: fetchPets,
-    refetchInterval: 500,
     enabled
   })
 }
@@ -65,7 +78,7 @@ async function uploadPetPhoto({
     return null
   }
   await fetch(
-    'https://photos.juxt.site/api/v1/users/urbtut4alt5a7tnv/upload/tjqf9xj',
+    `${photo_server}/api/v1/users/urbtut4alt5a7tnv/upload/tjqf9xj`,
     {
       headers: {
         accept: 'application/json, text/plain, */*',
@@ -88,7 +101,7 @@ async function getPetPhotos({
   previewToken?: string
 }) {
   const res = await fetch(
-    'https://photos.juxt.site/api/v1/photos?count=240&offset=0&s=as1g6jt3ddx4usoy&merged=true&country=&camera=0&order=added&q=',
+    `${photo_server}/api/v1/photos?count=240&offset=0&s=${album_id}&merged=true&country=&camera=0&order=added&q=`,
     {
       headers: {
         accept: 'application/json, text/plain, */*',
@@ -98,13 +111,13 @@ async function getPetPhotos({
     }
   )
   const json = (await res.json()) as PhotosResponse
-  const hashes = json.map((photo) => photo.Hash)
-  const urls = hashes.map(
-    (hash) =>
-      `https://photos.juxt.site/api/v1/t/${hash}/${previewToken}/fit_1920`
-  )
+  console.log(json)
 
-  return urls
+  return json.map(photo => ({
+    url: `${photo_server}/api/v1/t/${photo.Hash}/${previewToken}/fit_1920`,
+    title: photo.Title,
+    id: photo.ID
+  }))
 }
 
 export function usePetPhotos() {
