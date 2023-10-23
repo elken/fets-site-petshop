@@ -89,7 +89,7 @@ registerOAuth2Worker().catch((error) => {
 export function authorizeCallback(onSuccess?: () => void) {
   authorize({
     resource_server: RESOURCE_SERVER,
-    client_id: 'swagger-ui',
+    client_id: 'petstore',
     authorization_endpoint: `${AUTHORIZATION_SERVER}/oauth/authorize`,
     token_endpoint: `${AUTHORIZATION_SERVER}/oauth/token`,
     redirect_uri: `${APP_SERVER}/oauth-redirect.html`,
