@@ -357,7 +357,7 @@ export default {
           }
         ],
         responses: {
-          '204': {
+          '200': {
             description: 'Pet deleted'
           },
           '400': {
