@@ -94,8 +94,8 @@ export function authorizeCallback(onSuccess?: () => void) {
     token_endpoint: `${AUTHORIZATION_SERVER}/oauth/token`,
     redirect_uri: `${APP_SERVER}/oauth-redirect.html`,
     requested_scopes: [
-      `${AUTHORIZATION_SERVER}/scopes/petstore/write`,
-      `${AUTHORIZATION_SERVER}/scopes/petstore/read`
+      `${RESOURCE_SERVER}/petstore/scopes/write`,
+      `${RESOURCE_SERVER}/petstore/scopes/read`
     ]
   })
     .then(() => {
