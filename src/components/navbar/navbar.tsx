@@ -31,7 +31,7 @@ export default function Navbar() {
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <Link to={'/'} className="flex items-center">
                     <Logos.Vite className="h-8 mr-3" />
-                    <h3 className="text-2xl self-center font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-purple-800">PETS'r'US</h3>
+                    <h3 className="text-2xl self-center title-gradient-text">PETS'r'US</h3>
                 </Link>
                 <div className="w-auto">
                     <ul className="font-medium flex flex-row space-x-8 text-white">

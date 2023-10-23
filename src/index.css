@@ -27,4 +27,8 @@
         125px 25px;
     }
   }
+
+  .title-gradient-text {
+    @apply font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-purple-800;
+  }
 }

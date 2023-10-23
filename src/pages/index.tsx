@@ -5,9 +5,9 @@ function LoginMessage() {
   const { data: user } = useUser()
 
   if (user) {
-    return <p className="pt-2">Now that you've logged in, you can view pets you've previously ordered and order a new pet using the navigation above.</p>
+    return <p className="pt-2 text-2xl self-center title-gradient-text">Now that you've logged in, you can view pets you've previously ordered and order a new pet using the navigation above.</p>
   } else {
-    return <p className="pt-2">First, you need to log in using the "Login" button in the top right</p>
+    return <p className="pt-2 text-2xl self-center title-gradient-text">First, you need to log in using the "Login" button in the top right</p>
   }
 }
 
@@ -16,7 +16,7 @@ function InfoBox({ children }) {
 
     return (
         <div className="p-4 rounded-md cursor-pointer bg-white/5 text-white shadow-xl font-bold tracking-tight">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 ">
                 <img
                     className="h-48 object-cover rounded-md"
                     src={photos?.sort(() => 0.5 - Math.random())[0].url}
@@ -34,9 +34,9 @@ export default function Index() {
     return (
         <div className="flex gap-8 items-center justify-center">
             <InfoBox>
-                <h3 className="mb-3 text-2xl self-center font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-purple-800">Welcome to the Site Petshop demo</h3>
+                <h3 className="mb-3 text-2xl self-center title-gradient-text">Welcome to the Site Petshop demo</h3>
 
-                <p>The following app is a demo of the functionality provided by the petshop API included as a base.</p>
+                <p className="my-4 text-xl">The following app is a demo of the functionality provided by the petshop API included as a base.</p>
                 <LoginMessage />
             </InfoBox>
         </div>
