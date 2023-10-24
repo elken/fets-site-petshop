@@ -54,7 +54,6 @@ function Card(pet: Pet) {
         )}
         {typeof photoUrls === 'object' &&
           photoUrls
-            ?.filter((url) => !!url && url.includes('http'))
             .map((url) => (
               <img
                 key={url}
