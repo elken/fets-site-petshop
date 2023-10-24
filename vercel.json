@@ -3,6 +3,10 @@
     {
       "source": "/photo-api/:match*",
       "destination": "https://photos.juxt.site/:match*"
+    },
+    {
+      "source": "/:match*",
+      "destination": "/:match*"
     }
   ],
   "devCommand": "bun dev"
