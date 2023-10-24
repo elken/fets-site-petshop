@@ -7,7 +7,8 @@ import {
   photoPrismPreviewTokenKey,
   photoPrismTokenKey,
   PHOTO_SERVER,
-  RESOURCE_SERVER
+  RESOURCE_SERVER,
+  CLIENT as CLIENT_ID
 } from '../constants'
 import { useAtom } from 'jotai'
 import { atomWithLocalStorage } from '../utils'
@@ -89,7 +90,7 @@ registerOAuth2Worker().catch((error) => {
 export function authorizeCallback(onSuccess?: () => void) {
   authorize({
     resource_server: RESOURCE_SERVER,
-    client_id: 'petstore',
+    client_id: CLIENT_ID,
     authorization_endpoint: `${AUTHORIZATION_SERVER}/oauth/authorize`,
     token_endpoint: `${AUTHORIZATION_SERVER}/oauth/token`,
     redirect_uri: `${APP_SERVER}/oauth-redirect.html`,
